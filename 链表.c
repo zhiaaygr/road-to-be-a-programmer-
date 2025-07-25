@@ -124,3 +124,116 @@ void freeLIst(Node* head) {
 	}
 	head->next = NULL;
 }
+
+//寻找第k个节点
+Node* find_node_k(Node* head, int k) {
+	Node* fast = head->next; // 从第一个元素开始
+	Node* slow = head->next; // 从第一个元素开始
+	for (int i = 0; i < k; i++) {
+		fast = fast->next; // 快指针先走k步
+	}
+	while (fast != NULL) {
+		slow = slow->next; // 慢指针每次走一步
+		fast = fast->next; // 快指针每次走一步
+	}
+	return slow; // 慢指针此时指向的就是倒数第k个节点
+}
+
+// 去掉链表的绝对值相同元素，保留第一个（abs函数），最多有n个整数
+void remove_duplicate(Node* head, int n) {
+	ElemType* arr = (ElemType*)malloc(sizeof(ElemType) * (n + 1));
+	if (arr == NULL) {
+		printf("内存分配失败\n");
+		exit(1);
+	}
+	for (int i = 0; i < n; i++) {
+		arr[i] = 0; // 初始化数组
+	}
+	head = head->next; // 从第一个元素开始
+	while (head->next != NULL) {
+		if (arr[abs(head->data)] == 0) {
+			arr[abs(head->data)] = 1;
+		}
+		else {
+			Node* temp = head; // 保存该节点
+			head = head->next; // 将当前节点的next指向下一个节点的next
+			free(temp); // 释放下一个节点的内存
+		}
+	}
+}
+// 反转链表
+void reverse_list(Node* head) {
+	Node* first;
+	Node* second;
+	Node* third;
+	first = NULL;
+	second = head->next;
+	third = head->next;
+	while(second!=NULL){
+		third = third->next;
+		second->next = first;
+		first = second;
+		second = third;
+	}
+	head->next = first;
+}
+
+// 寻找中间值
+Node* find_middle(Node* head) {
+	Node *fast,*slow;
+	fast = slow = head;
+	while (1) {
+		fast = fast->next->next;
+		slow = slow->next;
+		//偶数个元素
+		if (fast->next == NULL) {
+			return slow;
+		}
+		//奇数个元素
+		if (fast== NULL) {
+			return slow;
+		}
+	}
+}
+
+// 判断是否是有环
+int IfCycle(Node* head) {
+	Node* fast, * slow;
+	fast = slow = head;
+	for (int i = 0; i < 100000000; ++i) {
+		fast = fast->next->next;
+		slow = slow->next;
+		if (slow == fast) {
+			return 1;
+		}
+	}
+	return -1;
+}
+
+//寻找环的入口
+Node* find_cycle_entry(Node* head) {
+	int size,temp,flag=0;
+	Node* fast, * slow;
+	fast = slow = head; // 初始化快慢指针
+	for (int i=0;;i++) {
+		fast = fast->next->next;
+		slow = slow->next;
+		if (slow == fast) {
+			flag++;
+			if (flag == 2) {
+				size = i - temp; // 计算环的长度
+				break;
+			}
+			temp = i;
+		}
+	}
+	fast = slow = head; // 重置快慢指针
+	for (int i = 0; i < size; i++) {
+		fast = fast->next;
+	}
+	while (fast != slow) {
+		fast = fast->next;
+		slow = slow->next;
+	}
+	return fast; // 返回环的入口节点
+}

@@ -45,3 +45,21 @@ int GetLength(Node* head);
 
 //释放链表
 void freeLIst(Node* head);
+
+//寻找第k个节点
+Node* find_node_k(Node* head, int k);
+
+// 去掉链表的绝对值相同元素，保留第一个（abs函数）,最多有n个元素
+void remove_duplicate(Node* head,int n);
+
+// 反转链表
+void reverse_list(Node* head);
+
+// 寻找中间值
+Node* find_middle(Node* head);
+
+// 判断是否是有环
+int IfCycle(Node* head);
+
+//寻找环的入口
+Node* find_cycle_entry(Node* head);
