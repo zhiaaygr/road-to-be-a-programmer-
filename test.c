@@ -3,52 +3,15 @@
 
 int main()
 {
-	//¶¨ÒåÍ¨Ñ¶Â¼
+	//å®šä¹‰é€šè®¯å½•
 	Contact contact;
-	//³õÊ¼»¯Í¨Ñ¶Â¼
+	//åˆå§‹åŒ–é€šè®¯å½•
 	initcontact(&contact);
 	int name[11];
 	int input;
 	while (1) {
-		input = menu();
-		switch (input)
-		{
-			//ÏÔÊ¾Í¨Ñ¶Â¼
-		case 1:
-			ShowContact(&contact);
-			break;
-			//²éÕÒÁªÏµÈË
-		case 2:
-			search(&contact);
-			break;
-			//ĞÂ½¨ÁªÏµÈË
-		case 3:
-			addpho(&contact);
-			increase_capacity(&contact);
-			break;
-			//É¾³ıÁªÏµÈË
-		case 4:
-			delete(&contact);
-			break;
-			//ĞŞ¸ÄÁªÏµÈËĞÅÏ¢
-		case 5:
-			printf("ÇëÊäÈëÒªĞŞ¸ÄÈËµÄÃû×Ö:>\n");
-			delete(&contact);
-			addpho(&contact);
-			break;
-			//°´ĞÕÃûÅÅĞò
-		case 6:
-			sort(contact);
-			ShowContact(&contact);
-			break;
-			//ÍË³ö
-		case 0:
-			SaveContact(contact);
-			DestroyContact(&contact);
-			return 0;
-		default:
-			printf("ÊäÈë´íÎó£¬ÇëÖØĞÂÊäÈë");
-			break;
-		}
+		input = menu();//menuå‡½æ•°è¿”å›é€‰æ‹©
+		chose (input);//è°ƒç”¨é€‰æ‹©å‡½æ•°
 	}
+
 }
