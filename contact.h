@@ -43,7 +43,7 @@ void initcontact(Contact *contact);
 void ShowContact(const Contact* contact);
 
 //选择操作
-void chose(int a);
+void chose(int input);
 
 //查找联系人
 int findname(Contact *contact,char name[]);
@@ -65,5 +65,6 @@ void SaveContact(Contact contact);
 void sort(Contact contact);
 //交换信息
 void change(peoinf* a, peoinf* b);
+
 
 
