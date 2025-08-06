@@ -4,11 +4,11 @@
 #include<assert.h>
 #define MAX 100
 
-//´òÓ¡²Ëµ¥²¢Ñ¡Ôñ
+//æ‰“å°èœå•å¹¶é€‰æ‹©
 int menu();
 
 
-// ½¨Á¢Í¨Ñ¶Â¼
+// å»ºç«‹é€šè®¯å½•
 typedef struct peoinf {
 	char name[11];
 	char phnum[12];
@@ -16,50 +16,54 @@ typedef struct peoinf {
 	char sex[5];
 	char adds[30];
 } peoinf;
-//¾²Ì¬°æ±¾
+//é™æ€ç‰ˆæœ¬
 //typedef struct Contact {
 //	peoinf peo[MAX];
 //	int count;
 //}Contact;
 
-//¶¯Ì¬°æ±¾
+//åŠ¨æ€ç‰ˆæœ¬
 typedef struct Contact {
-	peoinf *peo; //Ö¸ÏòÁªÏµÈËÊı×éµÄÖ¸Õë
-	int count;   //µ±Ç°ÁªÏµÈËÊıÁ¿
-	int capacity; //Í¨Ñ¶Â¼ÈİÁ¿
+	peoinf *peo; //æŒ‡å‘è”ç³»äººæ•°ç»„çš„æŒ‡é’ˆ
+	int count;   //å½“å‰è”ç³»äººæ•°é‡
+	int capacity; //é€šè®¯å½•å®¹é‡
 } Contact;
 
-//¼ÓÔØÍ¨Ñ¶Â¼
+//åŠ è½½é€šè®¯å½•
 void LoadContact(Contact* contact);
 
-//Ôö¼ÓÍ¨Ñ¶Â¼ÈİÁ¿
+//å¢åŠ é€šè®¯å½•å®¹é‡
 void increase_capacity(Contact* contact);
 
 
-//³õÊ¼»¯Í¨Ñ¶Â¼
+//åˆå§‹åŒ–é€šè®¯å½•
 void initcontact(Contact *contact);
 
-//ÏÔÊ¾Í¨Ñ¶Â¼
+//æ˜¾ç¤ºé€šè®¯å½•
 void ShowContact(const Contact* contact);
 
-//²éÕÒÁªÏµÈË
+//é€‰æ‹©æ“ä½œ
+void chose(int a);
+
+//æŸ¥æ‰¾è”ç³»äºº
 int findname(Contact *contact,char name[]);
 void search(Contact* contact);
 
-//ĞÂ½¨ÁªÏµÈË
+//æ–°å»ºè”ç³»äºº
 void addpho(Contact *contact);
 
-//É¾³ıÁªÏµÈË
+//åˆ é™¤è”ç³»äºº
 void delete(Contact *contact);
 
-//Ïú»ÙÍ¨Ñ¶Â¼
+//é”€æ¯é€šè®¯å½•
 void DestroyContact(Contact* contact); 
 
-//´æ´¢Í¨Ñ¶Â¼
+//å­˜å‚¨é€šè®¯å½•
 void SaveContact(Contact contact);
 
-//°´ĞÕÃûÅÅĞò
+//æŒ‰å§“åæ’åº
 void sort(Contact contact);
-//½»»»ĞÅÏ¢
+//äº¤æ¢ä¿¡æ¯
 void change(peoinf* a, peoinf* b);
+
 
