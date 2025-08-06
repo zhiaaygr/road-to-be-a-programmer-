@@ -6,31 +6,31 @@ int menu()
 {
 	int input;
 	printf("*****************************************\n");
-	printf("*****1.ÏÔÊ¾Í¨Ñ¶Â¼      2.²éÕÒÁªÏµÈË *****\n");
-	printf("*****3.´æ´¢ÁªÏµÈË      4.É¾³ıÁªÏµÈË *****\n");
-	printf("*****5.ĞŞ¸ÄÁªÏµÈËĞÅÏ¢  6.°´ĞÕÃûÅÅĞò *****\n");
-	printf("*****0.ÍË³ö                         *****\n");
-	printf("ÇëÑ¡Ôñ:>");
+	printf("*****1.æ˜¾ç¤ºé€šè®¯å½•      2.æŸ¥æ‰¾è”ç³»äºº *****\n");
+	printf("*****3.å­˜å‚¨è”ç³»äºº      4.åˆ é™¤è”ç³»äºº *****\n");
+	printf("*****5.ä¿®æ”¹è”ç³»äººä¿¡æ¯  6.æŒ‰å§“åæ’åº *****\n");
+	printf("*****0.é€€å‡º                         *****\n");
+	printf("è¯·é€‰æ‹©:>");
 	scanf("%d", &input);
 	return input;
 }
 
-//Ôö¼ÓÍ¨Ñ¶Â¼ÈİÁ¿
+//å¢åŠ é€šè®¯å½•å®¹é‡
 void increase_capacity(Contact* contact) {
 	assert(contact);
 	if (contact->capacity == contact->count) {
 		peoinf* pc = (peoinf*)realloc(contact->peo, (contact->capacity + 2) * sizeof(peoinf));
 		if (pc == NULL)
 		{
-			printf("ÄÚ´æ·ÖÅäÊ§°Ü\n");
+			printf("å†…å­˜åˆ†é…å¤±è´¥\n");
 			exit(EXIT_FAILURE);
 		}
-		contact->peo = pc; //½«Ö¸ÕëÖ¸ÏòĞÂ·ÖÅäµÄÄÚ´æ
-		contact->capacity += 2; //¸üĞÂÈİÁ¿
+		contact->peo = pc; //å°†æŒ‡é’ˆæŒ‡å‘æ–°åˆ†é…çš„å†…å­˜
+		contact->capacity += 2; //æ›´æ–°å®¹é‡
 	}
 }
 
-//¼ÓÔØÍ¨Ñ¶Â¼
+//åŠ è½½é€šè®¯å½•
 void LoadContact(Contact* contact) {
 	peoinf temp = {0};
 	FILE* file = fopen("contact.txt", "rb");
@@ -40,32 +40,75 @@ void LoadContact(Contact* contact) {
 	}
 	while (fread(&temp, sizeof(peoinf), 1, file) == 1) {
 		if(contact->capacity==contact->count)
-		increase_capacity(contact); //Ôö¼ÓÈİÁ¿
+		increase_capacity(contact); //å¢åŠ å®¹é‡
 		contact->peo[contact->count] = temp;
 		contact->count++;
 	}
 	fclose(file);
 }
 
-//³õÊ¼»¯Í¨Ñ¶Â¼
-//¾²Ì¬°æ±¾
+//åˆå§‹åŒ–é€šè®¯å½•
+//é™æ€ç‰ˆæœ¬
 //void initcontact(Contact* contact)
 //{
 //	assert(contact);
 //	memset(contact,0,sizeof(*contact));
 //}
-//¶¯Ì¬°æ±¾
+//åŠ¨æ€ç‰ˆæœ¬
 void initcontact(Contact* contact)
 {
 	assert(contact);
 	contact->peo = (peoinf*)malloc(3 * sizeof(peoinf));
-	assert(contact->peo); //È·±£ÄÚ´æ·ÖÅä³É¹¦
-	contact->count = 0; //³õÊ¼»¯ÁªÏµÈËÊıÁ¿Îª0
-	contact->capacity = 2; //³õÊ¼ÈİÁ¿Îª2
-	LoadContact(contact);  //¼ÓÔØÍ¨Ñ¶Â¼
+	assert(contact->peo); //ç¡®ä¿å†…å­˜åˆ†é…æˆåŠŸ
+	contact->count = 0; //åˆå§‹åŒ–è”ç³»äººæ•°é‡ä¸º0
+	contact->capacity = 2; //åˆå§‹å®¹é‡ä¸º2
+	LoadContact(contact);  //åŠ è½½é€šè®¯å½•
 }
 
-//ÏÔÊ¾Í¨Ñ¶Â¼
+//é€‰æ‹©
+void chose(int input){
+switch (input)
+		{
+			//æ˜¾ç¤ºé€šè®¯å½•
+		case 1:
+			ShowContact(&contact);
+			break;
+			//æŸ¥æ‰¾è”ç³»äºº
+		case 2:
+			search(&contact);
+			break;
+			//æ–°å»ºè”ç³»äºº
+		case 3:
+			addpho(&contact);
+			increase_capacity(&contact);
+			break;
+			//åˆ é™¤è”ç³»äºº
+		case 4:
+			delete(&contact);
+			break;
+			//ä¿®æ”¹è”ç³»äººä¿¡æ¯
+		case 5:
+			printf("è¯·è¾“å…¥è¦ä¿®æ”¹äººçš„åå­—:>\n");
+			delete(&contact);
+			addpho(&contact);
+			break;
+			//æŒ‰å§“åæ’åº
+		case 6:
+			sort(contact);
+			ShowContact(&contact);
+			break;
+			//é€€å‡º
+		case 0:
+			SaveContact(contact);
+			DestroyContact(&contact);
+			return 0;
+		default:
+			printf("è¾“å…¥é”™è¯¯ï¼Œè¯·é‡æ–°è¾“å…¥");
+			break;
+		}   
+}
+
+//æ˜¾ç¤ºé€šè®¯å½•
 void print(const Contact* contact,int i) {
 	printf("%6s\t%12s\t%3d\t%5s\t%-30s\n", contact->peo[i].name,
 		contact->peo[i].phnum,
@@ -76,14 +119,14 @@ void print(const Contact* contact,int i) {
 void ShowContact(const Contact* contact)
 {
 	assert(contact);
-	printf("%6s\t%12s\t%3s\t%5s\t%-30s\n","ĞÕÃû","µç»°ºÅÂë","ÄêÁä","ĞÔ±ğ","µØÖ·");
+	printf("%6s\t%12s\t%3s\t%5s\t%-30s\n","å§“å","ç”µè¯å·ç ","å¹´é¾„","æ€§åˆ«","åœ°å€");
 	for (int i = 0; i < contact->count; i++)
 	{
 		print(contact, i);
 	}
 }
 
-//²éÕÒÁªÏµÈË
+//æŸ¥æ‰¾è”ç³»äºº
 int findname(const Contact* contact, char name[])
 {
 	assert(contact);
@@ -100,75 +143,75 @@ void search(Contact* contact)
 	assert(contact);
 	if (contact->count == 0)
 	{
-		printf("ÔİÎŞÁªÏµÈË£¬ÇëÖØĞÂÑ¡Ôñ\n");
+		printf("æš‚æ— è”ç³»äººï¼Œè¯·é‡æ–°é€‰æ‹©\n");
 		return;
 	}
 	char name[11];
-	printf("ÇëÊäÈëÒª²éÕÒÈËµÄĞÕÃû\n");
+	printf("è¯·è¾“å…¥è¦æŸ¥æ‰¾äººçš„å§“å\n");
 	scanf("%s", name);
 	int ret = findname(contact,name);
 	if (ret != -1)
 	{
-		printf("%5s\t%12s\t%3s\t%5s\t%-30s\n", "ĞÕÃû", "µç»°ºÅÂë", "ÄêÁä", "ĞÔ±ğ", "µØÖ·");
+		printf("%5s\t%12s\t%3s\t%5s\t%-30s\n", "å§“å", "ç”µè¯å·ç ", "å¹´é¾„", "æ€§åˆ«", "åœ°å€");
 		print(contact, ret);
 	}
-	else printf("²éÎŞ´ËÈË\n");
+	else printf("æŸ¥æ— æ­¤äºº\n");
 
 }
 
-//ĞÂ½¨ÁªÏµÈË
+//æ–°å»ºè”ç³»äºº
 void addpho(Contact* contact)
 {
 	assert(contact);
-	printf("ÇëÊäÈëĞÕÃû:>\n");
+	printf("è¯·è¾“å…¥å§“å:>\n");
 	scanf("%s", contact->peo[contact->count].name);
-	printf("ÇëÊäÈëµç»°ºÅÂë:>\n");
+	printf("è¯·è¾“å…¥ç”µè¯å·ç :>\n");
 	scanf("%s", contact->peo[contact->count].phnum);
-	printf("ÇëÊäÈëÄêÁä:>\n");
+	printf("è¯·è¾“å…¥å¹´é¾„:>\n");
 	scanf("%d", &contact->peo[contact->count].age);
-	printf("ÇëÊäÈëĞÔ±ğ:>\n");
+	printf("è¯·è¾“å…¥æ€§åˆ«:>\n");
 	scanf("%s", contact->peo[contact->count].sex);
-	printf("ÇëÊäÈëµØÖ·:>\n");
+	printf("è¯·è¾“å…¥åœ°å€:>\n");
 	scanf("%s", contact->peo[contact->count].adds);
 	contact->count++;
 }
 
-//É¾³ıÁªÏµÈË
+//åˆ é™¤è”ç³»äºº
 void delete(Contact* contact)
 {
 	assert(contact);
 	int name[11];
 	if (contact->count == 0)
 	{
-		printf("Í¨Ñ¶Â¼Îª¿Õ£¬ÎŞÉ¾³ı¶ÔÏó\n");
+		printf("é€šè®¯å½•ä¸ºç©ºï¼Œæ— åˆ é™¤å¯¹è±¡\n");
 		return;
 	}
-	printf("ÇëÊäÈëÒªÉ¾³ıÈËµÄÃû×Ö:>\n"); 
+	printf("è¯·è¾“å…¥è¦åˆ é™¤äººçš„åå­—:>\n"); 
 	scanf("%s", name);
 	int ret = findname(contact, name);
 	if ( ret== -1) {
-		printf("²éÎŞ´ËÈË\n");
+		printf("æŸ¥æ— æ­¤äºº\n");
 		return;
 	}
 	for (int i = ret; i < contact->count; i++)
 	{
 		contact->peo[i] = contact->peo[i + 1];
 	}
-	printf("É¾³ı³É¹¦\n");
+	printf("åˆ é™¤æˆåŠŸ\n");
 	contact->count--;
 }
 
-//Ïú»ÙÍ¨Ñ¶Â¼
+//é”€æ¯é€šè®¯å½•
 void DestroyContact(Contact* contact) {
 	assert(contact);
-	free(contact->peo); //ÊÍ·ÅÁªÏµÈËÊı×éµÄÄÚ´æ
-	contact->peo = NULL; //±ÜÃâĞü¿ÕÖ¸Õë
-	contact->count = 0; //ÖØÖÃÁªÏµÈËÊıÁ¿
-	contact->capacity = 0; //ÖØÖÃÍ¨Ñ¶Â¼ÈİÁ¿
-	printf("ÒÑÍË³ö/n");
+	free(contact->peo); //é‡Šæ”¾è”ç³»äººæ•°ç»„çš„å†…å­˜
+	contact->peo = NULL; //é¿å…æ‚¬ç©ºæŒ‡é’ˆ
+	contact->count = 0; //é‡ç½®è”ç³»äººæ•°é‡
+	contact->capacity = 0; //é‡ç½®é€šè®¯å½•å®¹é‡
+	printf("å·²é€€å‡º/n");
 }
 
-//´æ´¢Í¨Ñ¶Â¼
+//å­˜å‚¨é€šè®¯å½•
 void SaveContact(const Contact* contact) {
 	assert(contact && contact->peo);
 	FILE* file = fopen("contact.txt", "wb");
@@ -183,7 +226,7 @@ void SaveContact(const Contact* contact) {
 	fclose(file);
 }
 
-//°´ĞÕÃûÅÅĞò
+//æŒ‰å§“åæ’åº
 void sort(Contact contact) {
 	assert(contact.peo);
 	for (int i = 0; i < contact.count - 1; i++) {
@@ -195,11 +238,12 @@ void sort(Contact contact) {
 	}
 }
 
-//½»»»ĞÅÏ¢
+//äº¤æ¢ä¿¡æ¯
 void change(peoinf* a, peoinf* b) {
 	peoinf temp;
 	temp = *a;
 	*a = *b;
 	*b = temp;
 }
+
 
