@@ -1,4 +1,4 @@
-#pragma once
+ï»¿#pragma once
 #include<stdio.h>
 #include<stdlib.h>
 typedef char ElemType;
@@ -7,33 +7,52 @@ typedef struct TreadNode {
 	char data;
 	struct TreadNode* lchild;
 	struct TreadNode* rchild;
+	struct TreadNode* parent;
 	int lflag;
 	int rflag;
 }TreadNode;
 
 typedef TreadNode* TreadTree;
 
+typedef enum {
+	Pre,
+	In,
+	Post,
+} Order;
+
 TreadTree Prev;
 static int index = 0;
 static char str[] = "AB#D##C##";
 
-//Éú³ÉÊ÷
+//ç”Ÿæˆæ ‘
 void createtree(TreadTree* T);
 
-// µİ¹éÇ°Ğò±éÀú
+// é€’å½’å‰åºéå†
 void PreOrder(TreadTree T);
 
-// µİ¹éÖĞĞò±éÀú
+// é€’å½’ä¸­åºéå†
 void InOrder(TreadTree T);
 
-// µİ¹éºóĞò±éÀú
+// é€’å½’ååºéå†
 void PostOrder(TreadTree T);
 
-//¾ßÌåÔªËØÏßË÷»¯
-void Threading(TreadTree T);
+//å…·ä½“å…ƒç´ çº¿ç´¢åŒ–(å…ˆåº)
+void PreThreading(TreadTree T);
 
-//¿ªÊ¼ÏßË÷»¯
-void InorderThreadingTree(TreadTree* head, TreadTree T);
+//å…·ä½“å…ƒç´ çº¿ç´¢åŒ–(ä¸­åº)
+void InThreading(TreadTree T);
 
-//Ñ­»·ÖĞĞò±éÀú
-void Inorder(TreadTree T);
+//å…·ä½“å…ƒç´ çº¿ç´¢åŒ–(ååº)
+void PostThreading(TreadTree T);
+
+//å¼€å§‹çº¿ç´¢åŒ–
+void ThreadingTree(TreadTree* head, TreadTree T,Order order);
+
+//å¾ªç¯å…ˆåºéå†
+void ThreadPreOrder(TreadTree T);
+
+//å¾ªç¯ä¸­åºéå†
+void ThreadInOrder(TreadTree T);
+
+//å¾ªç¯ååºéå†,é¸¡è‚‹ï¼Œä¸è¦
+

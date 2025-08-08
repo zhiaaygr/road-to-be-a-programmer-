@@ -1,7 +1,7 @@
-#define _CRT_SECURE_NO_WARNINGS 1
-#include"¶ş²æÊ÷.h"
+ï»¿#define _CRT_SECURE_NO_WARNINGS 1
+#include"äºŒå‰æ ‘.h"
 
-//Éú³ÉÊ÷£¨°´ÏÈĞò±éÀú£©
+//ç”Ÿæˆæ ‘ï¼ˆæŒ‰å…ˆåºéå†ï¼‰
 void createtree(TreadTree* T) {
 	ElemType ch = str[index++];
 	if (ch=='#') {
@@ -10,21 +10,27 @@ void createtree(TreadTree* T) {
 	}
 	*T = (TreadTree)malloc(sizeof(TreadNode));
 	if (*T == NULL) {
-		printf("ÄÚ´æ·ÖÅäÊ§°Ü£¡\n");
+		printf("å†…å­˜åˆ†é…å¤±è´¥ï¼\n");
 		exit(-1);
 	}
 	(*T)->data = ch;
 	createtree(&(*T)->lchild);
-	if ((*T)->lchild != NULL) {//Èç¹û×ó×ÓÊ÷²»Îª¿Õ£¬Ôò×óÖ¸ÕëÖ¸Ïò×ó×ÓÊ÷
-		(*T)->lflag = 0; // ×óÖ¸ÕëÎªº¢×ÓÖ¸Õë
+	if ((*T)->lchild != NULL) {//å¦‚æœå·¦å­æ ‘ä¸ä¸ºç©ºï¼Œåˆ™å·¦æŒ‡é’ˆæŒ‡å‘å·¦å­æ ‘
+		(*T)->lflag = 0;	
+	}
+	else if ((*T)->lchild != NULL) {//å¦‚æœå·¦å­æ ‘ä¸ä¸ºç©ºï¼Œåˆ™å·¦æŒ‡é’ˆæŒ‡å‘å·¦å­æ ‘
+		(*T)->lflag = 1;//å·¦æŒ‡é’ˆä¸ºçº¿ç´¢
 	}
 	createtree(&(*T)->rchild);
-	if ((*T)->rchild != NULL) {//Èç¹ûÓÒ×ÓÊ÷²»Îª¿Õ£¬ÔòÓÒÖ¸ÕëÖ¸ÏòÓÒ×ÓÊ÷
-		(*T)->rflag = 0; // ÓÒÖ¸ÕëÎªº¢×ÓÖ¸
+	if ((*T)->rchild != NULL) {//å¦‚æœå³å­æ ‘ä¸ä¸ºç©ºï¼Œåˆ™å³æŒ‡é’ˆæŒ‡å‘çº¿ç´¢
+		(*T)->rflag = 0; // å³æŒ‡é’ˆä¸ºå­©å­æŒ‡é’ˆ
+	}
+	if ((*T)->rchild == NULL) {//å¦‚æœå³å­æ ‘ä¸ºç©ºï¼Œåˆ™å³æŒ‡é’ˆæŒ‡å‘çº¿ç´¢
+		(*T)->rflag = 1; // å³æŒ‡é’ˆä¸ºçº¿ç´¢
 	}
 }
 
-// µİ¹éÇ°Ğò±éÀú
+// é€’å½’å‰åºéå†
 void PreOrder(TreadTree T) {
 	if (T == NULL) {
 		return;
@@ -34,17 +40,17 @@ void PreOrder(TreadTree T) {
 	PreOrder(T->rchild);
 }
 
-// µİ¹éÖĞĞò±éÀú
+// é€’å½’ä¸­åºéå†
 void InOrder(TreadTree T) {
 	if (T == NULL) {
 		return;
 	}
-	PreOrder(T->lchild);
+	InOrder(T->lchild);
 	printf("%c ", T->data);
-	PreOrder(T->rchild);
+	InOrder(T->rchild);
 }
 
-// µİ¹éºóĞò±éÀú
+// é€’å½’ååºéå†
 void PostOrder(TreadTree T) {
 	if (T == NULL) {
 		return;
@@ -54,58 +60,144 @@ void PostOrder(TreadTree T) {
 	printf("%c ", T->data);
 }
 
-//¾ßÌåÔªËØÏßË÷»¯(ÖĞĞò)
-void Threading(TreadTree T) {
-	if (T == NULL) {
+
+//å…·ä½“å…ƒç´ çº¿ç´¢åŒ–(å…ˆåº)
+void PreThreading(TreadTree T) {
+ 	if (T == NULL) {
 		return;
 	}
-	Threading(T->lchild);
-	if (T->lchild == NULL) {//×ó×ÓÊ÷¿ÕÔòÏßË÷»¯
+	//å½“å‰èŠ‚ç‚¹çº¿ç´¢åŒ–
+	if (T->lchild == NULL) {
 		T->lchild = Prev;
 		T->lflag = 1;
 	}
-	if (Prev->rchild == NULL) {//Ç°ÇıÓÒ×ÓÊ÷¿ÕÔòÏßË÷»¯
+	if (Prev != NULL) {
+		if (Prev->rchild == NULL) {
+			Prev->rchild = T;
+			Prev->rflag = 1;
+		}
+	}
+	Prev = T;//å‰é©±æ›´æ–°
+	//å·¦èŠ‚ç‚¹çº¿ç´¢åŒ–
+	if(T->lflag==0)
+	PreThreading(T->lchild);
+	//å³èŠ‚ç‚¹çº¿ç´¢åŒ–
+	if(T->rflag==0)
+	PreThreading(T->rchild);
+}
+
+//å…·ä½“å…ƒç´ çº¿ç´¢åŒ–(ä¸­åº)
+void InThreading(TreadTree T) {
+	if (T == NULL) {
+		return;
+	}
+	InThreading(T->lchild);//å‰é©±çº¿ç´¢åŒ–
+	if (T->lchild == NULL) {//å·¦å­æ ‘ç©ºåˆ™çº¿ç´¢åŒ–
+		T->lchild = Prev;
+		T->lflag = 1;
+	}
+	if (Prev->rchild == NULL) {//å‰é©±å³å­æ ‘ç©ºåˆ™çº¿ç´¢åŒ–
 		Prev->rchild = T;
 		Prev->rflag = 1;
 	}
-	Prev = T;//¸üĞÂÇ°Çı
-	Threading(T->rchild);//ÓÒ×ÓÊ÷µİ¹é
+	Prev = T;//æ›´æ–°å‰é©±
+	InThreading(T->rchild);//å³å­æ ‘çº¿ç´¢åŒ–
 }
 
-//¿ªÊ¼ÏßË÷»¯(ÖĞĞò)
-void InorderThreadingTree(TreadTree* head,TreadTree T) {
-	*head = (TreadTree)malloc(sizeof(TreadTree));
+//å…·ä½“å…ƒç´ çº¿ç´¢åŒ–(ååº)
+void PostThreading(TreadTree T) {
+	if (T == NULL) {
+		return;
+	}
+	//å°†åŒäº²ç»“ç‚¹èµ‹å€¼,ç©ºæŒ‡é’ˆä¸éœ€è¦çº¿ç´¢
+	if (T->lchild != NULL) {
+		T->lchild->parent = T;
+	}
+	if (T->rchild != NULL) {
+		T->rchild->parent = T;
+	}
+	//å·¦èŠ‚ç‚¹çº¿ç´¢åŒ–
+	//if(T->lflag==1)
+	PostThreading(T->lchild);
+	//å³èŠ‚ç‚¹çº¿ç´¢åŒ–
+	//if (T->rflag == 0)
+	PostThreading(T->rchild);
+	if (T->lchild == NULL) {//å·¦å­æ ‘ç©ºåˆ™çº¿ç´¢åŒ–
+		T->lchild = Prev;
+		T->lflag = 1;
+	}
+	if (Prev->rchild == NULL) {//å‰é©±å³å­æ ‘ç©ºåˆ™çº¿ç´¢åŒ–
+		Prev->rchild = T;
+		Prev->rflag = 1;
+	}
+	Prev = T;//æ›´æ–°å‰é©±
+}
+
+//å¼€å§‹çº¿ç´¢åŒ–
+void ThreadingTree(TreadTree* head,TreadTree T,Order order) {
+	*head = (TreadTree)malloc(sizeof(TreadNode));
 	if (*head == NULL) {
-		printf("ÄÚ´æ·ÖÅäÊ§°Ü£¡\n");
+		printf("å†…å­˜åˆ†é…å¤±è´¥ï¼\n");
 		exit(-1);
 	}
-	(*head)->rchild = *head; // Í·½ÚµãµÄÓÒ×ÓÊ÷Îª¿Õ
-	(*head)->lflag = 0; // ×óÖ¸ÕëÎªº¢×ÓÖ¸Õë
-	(*head)->rflag = 1; // ÓÒÖ¸ÕëÎªÏßË÷
+	(*head)->rchild = *head; // å¤´èŠ‚ç‚¹çš„å³å­æ ‘ä¸ºç©º
+	(*head)->lflag = 0; // å·¦æŒ‡é’ˆä¸ºå­©å­æŒ‡é’ˆ
+	(*head)->rflag = 1; // å³æŒ‡é’ˆä¸ºçº¿ç´¢
 	if (T == NULL) {
-		(*head)->lchild = head; // Èç¹ûÊ÷Îª¿Õ£¬×ó×ÓÊ÷Ö¸ÏòÍ·½Úµã
+		(*head)->lchild = *head; // å¦‚æœæ ‘ä¸ºç©ºï¼Œå·¦å­æ ‘æŒ‡å‘å¤´èŠ‚ç‚¹
 	}
 	else
 	{
-		(*head)->lchild = T;//×óÖ¸Õë½ÓÉÏÊ÷£¨¿ªÊ¼Ã»ÓĞ·ÖÇå×óÓÒ£©
-		Prev = *head; // Ç°Çı³õÊ¼»¯ÎªÍ·½Úµã
-		Threading(T); // ÏßË÷»¯
-		Prev->rchild = *head;//×îºóÒ»¸ö½ÚµãÖ¸ÏòÍ·½ÚµãĞÎ³É»·
-		Prev->rflag = 1;//¼ÇÂ¼ÎªÏßË÷
-		(*head)->rchild = Prev;//Í·½ÚµãµÄÓÒ×ÓÊ÷Ö¸Ïò×îºóÒ»¸ö½Úµã
+		(*head)->lchild = T;//å·¦æŒ‡é’ˆæ¥ä¸Šæ ‘ï¼ˆå¼€å§‹æ²¡æœ‰åˆ†æ¸…å·¦å³ï¼‰
+		Prev = *head; // å‰é©±åˆå§‹åŒ–ä¸ºå¤´èŠ‚ç‚¹
+		switch (order) {
+		case Pre:
+			PreThreading(T);
+			break;
+		case In:
+			InThreading(T);
+			break;
+		case Post:
+			PostThreading(T);
+			break;
+		}
+		if (order != Post) {
+			Prev->rchild = *head;//æœ€åä¸€ä¸ªèŠ‚ç‚¹æŒ‡å‘å¤´èŠ‚ç‚¹å½¢æˆç¯
+			Prev->rflag = 1;//è®°å½•ä¸ºçº¿ç´¢
+			(*head)->rchild = Prev;//å¤´èŠ‚ç‚¹çš„å³å­æ ‘æŒ‡å‘æœ€åä¸€ä¸ªèŠ‚ç‚¹
+		}
+		else if (order == Post) {
+			Prev->parent = *head;
+		}
 	}
 }
 
-//Ñ­»·ÖĞĞò±éÀú
-void Inorder(TreadTree T) {
+
+//å¾ªç¯å…ˆåºéå†
+void ThreadPreOrder(TreadTree head) {
 	TreadTree curr;
-	curr = T->lchild;
-	while (curr != T) {
+	curr = head->lchild;
+	while (curr != head) {
+		while (curr->lflag == 0) {
+			printf("%c ", curr->data);//è¾“å‡ºå½“å‰ä¿¡æ¯
+			curr = curr->lchild;//å‘å·¦è¡Œé©¶
+		}
+		printf("%c ", curr->data);//æœ€åä¸€ä¸ªå…ƒç´ å·¦å­æ ‘ä¸ºçº¿ç´¢ï¼Œä½†æœ¬èº«ä¸ºæ ‘ï¼Œéœ€è¾“å‡º
+		curr = curr->rchild;//ç§»åŠ¨åˆ°ä¸‹ä¸€å…ƒç´ 
+	}
+	printf("\n");
+}
+
+//å¾ªç¯ä¸­åºéå†
+void ThreadInOrder(TreadTree head) {
+	TreadTree curr;
+	curr = head->lchild;
+	while (curr != head) {
 		while (curr->lflag == 0) {
 			curr = curr->lchild;
 		}
 		printf("%c ", curr->data);
-		while (curr->rflag == 1 &&curr->rchild!=T) {
+		while (curr->rflag == 1 &&curr->rchild!=head) {
 			curr = curr->rchild;
 			printf("%c ", curr->data);
 		}
@@ -113,3 +205,6 @@ void Inorder(TreadTree T) {
 	}
 	printf("\n");
 }
+
+//å¾ªç¯ååºéå†,é¸¡è‚‹ï¼Œä¸è¦
+
